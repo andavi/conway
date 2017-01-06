@@ -41,6 +41,66 @@ def addBlinker(i, j, grid):
                        [0, 255, 0]])
     grid[i:i+3, j:j+3] = blinker
 
+def addToad(i, j, grid):
+    """adds toad with top left cel at (i, j)"""
+    toad = np.array([[0, 0, 255, 0],
+                       [255, 0, 0, 255],
+                       [255, 0, 0, 255],
+                       [0, 255, 0, 0]])
+    grid[i:i+4, j:j+4] = toad
+
+def addPulsar(i, j, grid):
+    """adds pulsar with top left cel at (i, j)"""
+    pulsar = np.array([[0, 0, 255, 255, 255, 0, 0, 0, 255, 255, 255, 0, 0],
+                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                       [255, 0, 0, 0, 0, 255, 0, 255, 0, 0, 0, 0, 255],
+                       [255, 0, 0, 0, 0, 255, 0, 255, 0, 0, 0, 0, 255],
+                       [255, 0, 0, 0, 0, 255, 0, 255, 0, 0, 0, 0, 255],
+                       [0, 0, 255, 255, 255, 0, 0, 0, 255, 255, 255, 0, 0],
+                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                       [0, 0, 255, 255, 255, 0, 0, 0, 255, 255, 255, 0, 0],
+                       [255, 0, 0, 0, 0, 255, 0, 255, 0, 0, 0, 0, 255],
+                       [255, 0, 0, 0, 0, 255, 0, 255, 0, 0, 0, 0, 255],
+                       [255, 0, 0, 0, 0, 255, 0, 255, 0, 0, 0, 0, 255],
+                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                       [0, 0, 255, 255, 255, 0, 0, 0, 255, 255, 255, 0, 0]])
+    grid[i:i+13, j:j+13] = pulsar
+
+def addRPentomino(i, j, grid):
+    """adds R-pentomino"""
+    pentomino = np.array([[0, 255, 255],
+                       [255, 255, 0],
+                       [0, 255, 0]])
+    grid[i:i+3, j:j+3] = pentomino
+
+def addGosperGliderGun(i, j, grid):
+    """adds a Gosper Glider Gun with top left cell at (i, j)"""
+    gun = np.zeros(11*38).reshape(11, 38)
+
+    gun[5][1] = gun[5][2] = 255
+    gun[6][1] = gun[6][2] = 255
+
+    gun[3][13] = gun[3][14] = 255
+    gun[4][12] = gun[4][16] = 255
+    gun[5][11] = gun[5][17] = 255
+    gun[6][11] = gun[6][15] = gun[6][17] = gun[6][18] = 255
+    gun[7][11] = gun[7][17] = 255
+    gun[8][12] = gun[8][16] = 255
+    gun[9][13] = gun[9][14] = 255
+
+    gun[1][25] = 255
+    gun[2][23] = gun[2][25] = 255
+    gun[3][21] = gun[3][22] = 255
+    gun[4][21] = gun[4][22] = 255
+    gun[5][21] = gun[5][22] = 255
+    gun[6][23] = gun[6][25] = 255
+    gun[7][25] = 255
+
+    gun[3][35] = gun[3][36] = 255
+    gun[4][35] = gun[4][36] = 255
+
+    grid[i:i+11, j:j+38] = gun
+
 def alive(i, j, grid):
     return int(grid[i, j] > 0)
 
@@ -83,6 +143,9 @@ def main():
     parser.add_argument('--glider', action='store_true', required=False)
     parser.add_argument('--block', action='store_true', required=False)
     parser.add_argument('--blinker', action='store_true', required=False)
+    parser.add_argument('--toad', action='store_true', required=False)
+    parser.add_argument('--rpentomino', action='store_true', required=False)
+    parser.add_argument('--pulsar', action='store_true', required=False)
     parser.add_argument('--gosper', action='store_true', required=False)
     args = parser.parse_args()
 
@@ -108,6 +171,22 @@ def main():
     elif args.blinker:
         grid = np.zeros(N*N).reshape(N, N)
         addBlinker(1, 1, grid)
+    elif args.toad:
+        grid = np.zeros(N*N).reshape(N, N)
+        addToad(N/2-2, N/2-2, grid)
+    elif args.rpentomino:
+        grid = np.zeros(N*N).reshape(N, N)
+        addRPentomino(N/2-2, N/2-2, grid)
+    elif args.pulsar:
+        if N < 16:
+            N = 16
+        grid = np.zeros(N*N).reshape(N, N)
+        addPulsar(N/2-7, N/2-7, grid)
+    elif args.gosper:
+        if N < 39:
+            N = 39
+        grid = np.zeros(N*N).reshape(N, N)
+        addGosperGliderGun(N/2-6, N/2-19, grid)
     else:
         # randomize grid
         grid = randomGrid(N)
