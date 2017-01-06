@@ -22,27 +22,27 @@ def randomGrid(N):
     # return np.random.choice(vals, N*N, p=[0.8, 0.2]).reshape(N, N)
 
 def addGlider(i, j, grid):
-    """adds glider with top left cel at (i, j)"""
+    """adds glider with top left cell at (i, j)"""
     glider = np.array([[0, 0, 255],
                        [255, 0, 255],
                        [0, 255, 255]])
     grid[i:i+3, j:j+3] = glider
 
 def addBlock(i, j, grid):
-    """adds block with top left at (i, j)"""
+    """adds block with top left cell at (i, j)"""
     block = np.array([[255, 255],
                       [255, 255]])
     grid[i:i+2, j:j+2] = block
 
 def addBlinker(i, j, grid):
-    """adds blinker with top left cel at (i, j)"""
+    """adds blinker with top left cell at (i, j)"""
     blinker = np.array([[0, 255, 0],
                        [0, 255, 0],
                        [0, 255, 0]])
     grid[i:i+3, j:j+3] = blinker
 
 def addToad(i, j, grid):
-    """adds toad with top left cel at (i, j)"""
+    """adds toad with top left cell at (i, j)"""
     toad = np.array([[0, 0, 255, 0],
                        [255, 0, 0, 255],
                        [255, 0, 0, 255],
@@ -50,7 +50,7 @@ def addToad(i, j, grid):
     grid[i:i+4, j:j+4] = toad
 
 def addPulsar(i, j, grid):
-    """adds pulsar with top left cel at (i, j)"""
+    """adds pulsar with top left cell at (i, j)"""
     pulsar = np.array([[0, 0, 255, 255, 255, 0, 0, 0, 255, 255, 255, 0, 0],
                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                        [255, 0, 0, 0, 0, 255, 0, 255, 0, 0, 0, 0, 255],
@@ -167,10 +167,10 @@ def main():
         addGlider(1, 1, grid)
     elif args.block:
         grid = np.zeros(N*N).reshape(N, N)
-        addBlock(1, 1, grid)
+        addBlock(N/2-1, N/2-1, grid)
     elif args.blinker:
         grid = np.zeros(N*N).reshape(N, N)
-        addBlinker(1, 1, grid)
+        addBlinker(N/2-2, N/2-2, grid)
     elif args.toad:
         grid = np.zeros(N*N).reshape(N, N)
         addToad(N/2-2, N/2-2, grid)
@@ -195,14 +195,14 @@ def main():
     fig, ax = plt.subplots()
     img = ax.imshow(grid, interpolation='nearest', cmap=cmap, norm=norm)
     ani = animation.FuncAnimation(fig, update, fargs=(img, grid, N, ),
-                                  frames=10,
+                                  frames=10000,
                                   interval=updateInterval,
                                   save_count=50)
 
     # number of frames?
     # set the output file
     if args.movfile:
-        ani.save(args.movfile, fps=30, extra_args=['-vcodec', 'livx264'])
+        ani.save(args.movfile, fps=30, extra_args=['-vcodec', 'libx264'])
 
     plt.show()
 
