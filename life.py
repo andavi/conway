@@ -2,14 +2,24 @@ import sys, argparse
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from matplotlib import colors
 
-ON = 255
-OFF = 0
-vals = [ON, OFF]
+GREEN = 255
+BLUE = 170
+RED = 85
+WHITE = 0
+vals = [WHITE, RED, BLUE, GREEN]
+# vals = [WHITE, GREEN]
+cmap = colors.ListedColormap(['white', 'red', 'blue', 'green'])
+# cmap = colors.ListedColormap(['white', 'green'])
+bounds = [WHITE, RED-1, BLUE-1, GREEN-1, GREEN]
+# bounds = [WHITE, GREEN/2, GREEN+1]
+norm = colors.BoundaryNorm(bounds, cmap.N)
 
 def randomGrid(N):
     """returns a grid of NxN random values"""
-    return np.random.choice(vals, N*N, p=[0.2, 0.8]).reshape(N, N)
+    return np.random.choice(vals, N*N, p=[0.7, 0.1, 0.1, 0.1]).reshape(N, N)
+    # return np.random.choice(vals, N*N, p=[0.8, 0.2]).reshape(N, N)
 
 def addGlider(i, j, grid):
     """adds glider with top left cel at (i, j)"""
@@ -27,7 +37,7 @@ def update(frameNum, img, grid, N):
     newGrid = grid.copy()
     for i in range(N):
         for j in range(N):
-            # compute 8 neihbors
+            # compute 8 neighbors
             total = int(alive(i, (j-1)%N, grid) + alive(i, (j+1)%N, grid) +
                     alive((i-1)%N, j, grid) + alive((i+1)%N, j, grid) +
                     alive((i-1)%N, (j-1)%N, grid) + alive((i-1)%N, (j+1)%N, grid) +
@@ -35,10 +45,14 @@ def update(frameNum, img, grid, N):
             # apply rules
             if alive(i, j, grid):
                 if (total < 2) or (total > 3):
-                    newGrid[i, j] = OFF
+                    newGrid[i, j] = WHITE
+                elif (total == 2):
+                    newGrid[i, j] = BLUE
+                else:
+                    newGrid[i, j] = RED
             else:
                 if total == 3:
-                    newGrid[i, j] = ON
+                    newGrid[i, j] = GREEN
 
     # update data
     img.set_data(newGrid)
@@ -79,7 +93,7 @@ def main():
 
     # set up animation
     fig, ax = plt.subplots()
-    img = ax.imshow(grid, interpolation='nearest')
+    img = ax.imshow(grid, interpolation='nearest', cmap=cmap, norm=norm)
     ani = animation.FuncAnimation(fig, update, fargs=(img, grid, N, ),
                                   frames=10,
                                   interval=updateInterval,
