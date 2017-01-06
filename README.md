@@ -2,6 +2,8 @@
 
 With colors, toroidal boundary conditions, and starting options.
 
+![Conway's Game of Life](https://github.com/andavi/conway/blob/master/life.gif "Conway's Game of Life")
+
 Green for newly generated cells, blue for cells with 2 neighbors last turn, and red for cells with 3 neighbors last turn. White cells are empty/dead.
 
 Use flags: --glider, --block, --blinker, --toad, --rpentomino, --pulsar, <strong>or</strong> --gosper to see different starting patterns.
