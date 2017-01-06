@@ -28,6 +28,19 @@ def addGlider(i, j, grid):
                        [0, 255, 255]])
     grid[i:i+3, j:j+3] = glider
 
+def addBlock(i, j, grid):
+    """adds block with top left at (i, j)"""
+    block = np.array([[255, 255],
+                      [255, 255]])
+    grid[i:i+2, j:j+2] = block
+
+def addBlinker(i, j, grid):
+    """adds blinker with top left cel at (i, j)"""
+    blinker = np.array([[0, 255, 0],
+                       [0, 255, 0],
+                       [0, 255, 0]])
+    grid[i:i+3, j:j+3] = blinker
+
 def alive(i, j, grid):
     return int(grid[i, j] > 0)
 
@@ -68,6 +81,8 @@ def main():
     parser.add_argument('--mov-file', dest='movfile', required=False)
     parser.add_argument('--interval', dest='interval', required=False)
     parser.add_argument('--glider', action='store_true', required=False)
+    parser.add_argument('--block', action='store_true', required=False)
+    parser.add_argument('--blinker', action='store_true', required=False)
     parser.add_argument('--gosper', action='store_true', required=False)
     args = parser.parse_args()
 
@@ -87,6 +102,12 @@ def main():
     if args.glider:
         grid = np.zeros(N*N).reshape(N, N)
         addGlider(1, 1, grid)
+    elif args.block:
+        grid = np.zeros(N*N).reshape(N, N)
+        addBlock(1, 1, grid)
+    elif args.blinker:
+        grid = np.zeros(N*N).reshape(N, N)
+        addBlinker(1, 1, grid)
     else:
         # randomize grid
         grid = randomGrid(N)
