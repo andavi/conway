@@ -13,3 +13,5 @@ Use: --grid-size [int] and/or --interval [int] to change grid-size and/or update
 Example:
 
 <em>$ python life.py --grid-size 64 --interval 25 --gosper</em>
+
+![Gosper Glider Gun](https://github.com/andavi/conway/blob/master/gosper.gif "Gosper Glider Gun")
