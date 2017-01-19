@@ -8,96 +8,97 @@ WHITE = 0
 GREEN = 1
 BLUE = 2
 RED = 3
-vals = [WHITE, RED, BLUE, GREEN]
+GRAY = -1
+vals = [GRAY, WHITE, RED, BLUE, GREEN, ]
 # vals = [WHITE, GREEN]
-cmap = colors.ListedColormap(['white', 'green', 'blue', 'red'])
+cmap = colors.ListedColormap(['gray', 'white', 'green', 'blue', 'red'])
 # cmap = colors.ListedColormap(['white', 'green'])
-bounds = [WHITE-.5, GREEN-.5, BLUE-.5, RED-.5, RED+.5]
+bounds = [GRAY-.5, WHITE-.5, GREEN-.5, BLUE-.5, RED-.5, RED+.5]
 # bounds = [WHITE, GREEN/2, GREEN+1]
 norm = colors.BoundaryNorm(bounds, cmap.N)
 
 def randomGrid(N):
     """returns a grid of NxN random values"""
-    return np.random.choice(vals, N*N, p=[0.7, 0.1, 0.1, 0.1]).reshape(N, N)
+    return np.random.choice(vals, N*N, p=[0.7, 0.1, 0.1, 0.1, 0.0]).reshape(N, N)
     # return np.random.choice(vals, N*N, p=[0.8, 0.2]).reshape(N, N)
 
 def addGlider(i, j, grid):
     """adds glider with top left cell at (i, j)"""
-    glider = np.array([[0, 0, 255],
-                       [255, 0, 255],
-                       [0, 255, 255]])
+    glider = np.array([[0, 0, 1],
+                       [1, 0, 1],
+                       [0, 1, 1]])
     grid[i:i+3, j:j+3] = glider
 
 def addBlock(i, j, grid):
     """adds block with top left cell at (i, j)"""
-    block = np.array([[255, 255],
-                      [255, 255]])
+    block = np.array([[1, 1],
+                      [1, 1]])
     grid[i:i+2, j:j+2] = block
 
 def addBlinker(i, j, grid):
     """adds blinker with top left cell at (i, j)"""
-    blinker = np.array([[0, 255, 0],
-                       [0, 255, 0],
-                       [0, 255, 0]])
+    blinker = np.array([[0, 1, 0],
+                       [0, 1, 0],
+                       [0, 1, 0]])
     grid[i:i+3, j:j+3] = blinker
 
 def addToad(i, j, grid):
     """adds toad with top left cell at (i, j)"""
-    toad = np.array([[0, 0, 255, 0],
-                       [255, 0, 0, 255],
-                       [255, 0, 0, 255],
-                       [0, 255, 0, 0]])
+    toad = np.array([[0, 0, 1, 0],
+                       [1, 0, 0, 1],
+                       [1, 0, 0, 1],
+                       [0, 1, 0, 0]])
     grid[i:i+4, j:j+4] = toad
 
 def addPulsar(i, j, grid):
     """adds pulsar with top left cell at (i, j)"""
-    pulsar = np.array([[0, 0, 255, 255, 255, 0, 0, 0, 255, 255, 255, 0, 0],
+    pulsar = np.array([[0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0],
                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [255, 0, 0, 0, 0, 255, 0, 255, 0, 0, 0, 0, 255],
-                       [255, 0, 0, 0, 0, 255, 0, 255, 0, 0, 0, 0, 255],
-                       [255, 0, 0, 0, 0, 255, 0, 255, 0, 0, 0, 0, 255],
-                       [0, 0, 255, 255, 255, 0, 0, 0, 255, 255, 255, 0, 0],
+                       [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+                       [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+                       [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+                       [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0],
                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 255, 255, 255, 0, 0, 0, 255, 255, 255, 0, 0],
-                       [255, 0, 0, 0, 0, 255, 0, 255, 0, 0, 0, 0, 255],
-                       [255, 0, 0, 0, 0, 255, 0, 255, 0, 0, 0, 0, 255],
-                       [255, 0, 0, 0, 0, 255, 0, 255, 0, 0, 0, 0, 255],
+                       [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0],
+                       [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+                       [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+                       [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 255, 255, 255, 0, 0, 0, 255, 255, 255, 0, 0]])
+                       [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0]])
     grid[i:i+13, j:j+13] = pulsar
 
 def addRPentomino(i, j, grid):
     """adds R-pentomino"""
-    pentomino = np.array([[0, 255, 255],
-                       [255, 255, 0],
-                       [0, 255, 0]])
+    pentomino = np.array([[0, 1, 1],
+                       [1, 1, 0],
+                       [0, 1, 0]])
     grid[i:i+3, j:j+3] = pentomino
 
 def addGosperGliderGun(i, j, grid):
     """adds a Gosper Glider Gun with top left cell at (i, j)"""
     gun = np.zeros(11*38).reshape(11, 38)
 
-    gun[5][1] = gun[5][2] = 255
-    gun[6][1] = gun[6][2] = 255
+    gun[5][1] = gun[5][2] = 1
+    gun[6][1] = gun[6][2] = 1
 
-    gun[3][13] = gun[3][14] = 255
-    gun[4][12] = gun[4][16] = 255
-    gun[5][11] = gun[5][17] = 255
-    gun[6][11] = gun[6][15] = gun[6][17] = gun[6][18] = 255
-    gun[7][11] = gun[7][17] = 255
-    gun[8][12] = gun[8][16] = 255
-    gun[9][13] = gun[9][14] = 255
+    gun[3][13] = gun[3][14] = 1
+    gun[4][12] = gun[4][16] = 1
+    gun[5][11] = gun[5][17] = 1
+    gun[6][11] = gun[6][15] = gun[6][17] = gun[6][18] = 1
+    gun[7][11] = gun[7][17] = 1
+    gun[8][12] = gun[8][16] = 1
+    gun[9][13] = gun[9][14] = 1
 
-    gun[1][25] = 255
-    gun[2][23] = gun[2][25] = 255
-    gun[3][21] = gun[3][22] = 255
-    gun[4][21] = gun[4][22] = 255
-    gun[5][21] = gun[5][22] = 255
-    gun[6][23] = gun[6][25] = 255
-    gun[7][25] = 255
+    gun[1][25] = 1
+    gun[2][23] = gun[2][25] = 1
+    gun[3][21] = gun[3][22] = 1
+    gun[4][21] = gun[4][22] = 1
+    gun[5][21] = gun[5][22] = 1
+    gun[6][23] = gun[6][25] = 1
+    gun[7][25] = 1
 
-    gun[3][35] = gun[3][36] = 255
-    gun[4][35] = gun[4][36] = 255
+    gun[3][35] = gun[3][36] = 1
+    gun[4][35] = gun[4][36] = 1
 
     grid[i:i+11, j:j+38] = gun
 
@@ -118,29 +119,37 @@ def update(frameNum, img, grid, N, inspect):
                         alive((i+1)%N, (j-1)%N, grid) + alive((i+1)%N, (j+1)%N, grid))
                 # apply rules
                 if alive(i, j, grid):
+
                     if (total < 2) or (total > 3):
                         newGrid[i, j] = WHITE
                     elif (total == 2):
                         newGrid[i, j] = BLUE
                         # inspect.add((i, j))
-                        for m in range(3):
-                            for n in range(3):
-                                inspect.add(((-i+m)%N, (-j+n)%N))
+                        # for m in range(-1,2):
+                        #     for n in range(-1,2):
+                        #         inspect.add(((i+m)%N, (j+n)%N))
                     else:
                         newGrid[i, j] = RED
-                        for m in range(3):
-                            for n in range(3):
-                                inspect.add(((-i+m)%N, (-j+n)%N))
+                        # for m in range(-1,2):
+                        #     for n in range(-1,2):
+                        #         inspect.add(((i+m)%N, (j+n)%N))
+                    for m in range(-1,2):
+                        for n in range(-1,2):
+                            inspect.add(((i+m)%N, (j+n)%N))
+                            if newGrid[(i+m)%N, (j+n)%N] == WHITE:
+                                newGrid[(i+m)%N, (j+n)%N] = GRAY
                 else:
                     if total == 3:
                         newGrid[i, j] = GREEN
-                        for m in range(3):
-                            for n in range(3):
-                                inspect.add(((-i+m)%N, (-j+n)%N))
+                        for m in range(-1,2):
+                            for n in range(-1,2):
+                                inspect.add(((i+m)%N, (j+n)%N))
+                                if newGrid[(i+m)%N, (j+n)%N] == WHITE:
+                                    newGrid[(i+m)%N, (j+n)%N] = GRAY
 
     else:
-        nextInspect = set()
-        for i, j in inspect:
+        nextInspect = inspect.copy()
+        for i, j in nextInspect:
             # compute 8 neighbors
             total = int(alive(i, (j-1)%N, grid) + alive(i, (j+1)%N, grid) +
                     alive((i-1)%N, j, grid) + alive((i+1)%N, j, grid) +
@@ -150,25 +159,38 @@ def update(frameNum, img, grid, N, inspect):
             if alive(i, j, grid):
                 if (total < 2) or (total > 3):
                     newGrid[i, j] = WHITE
+                    # inspect.remove((i, j))
                 elif (total == 2):
                     newGrid[i, j] = BLUE
-                    for m in range(3):
-                        for n in range(3):
-                            nextInspect.add(((-i+m)%N, (-j+n)%N))
+                    # for m in range(-1,2):
+                    #     for n in range(-1,2):
+                    #         inspect.add(((i+m)%N, (j+n)%N))
+                    #         if newGrid[(i+m)%N, (j+m)%N] == WHITE:
+                    #             newGrid[(i+m)%N, (j+m)%N] = GRAY
                 else:
                     newGrid[i, j] = RED
-                    for m in range(3):
-                        for n in range(3):
-                            nextInspect.add(((-i+m)%N, (-j+n)%N))
+                    # for m in range(-1,2):
+                    #     for n in range(-1,2):
+                    #         inspect.add(((i+m)%N, (j+n)%N))
+                    #         if newGrid[(i+m)%N, (j+m)%N] == WHITE:
+                    #             newGrid[(i+m)%N, (j+m)%N] = GRAY
+                for m in range(-1,2):
+                    for n in range(-1,2):
+                        inspect.add(((i+m)%N, (j+n)%N))
+                        if newGrid[(i+m)%N, (j+n)%N] == WHITE:
+                            newGrid[(i+m)%N, (j+n)%N] = GRAY
             else:
                 if total == 3:
                     newGrid[i, j] = GREEN
-                    for m in range(3):
-                        for n in range(3):
-                            nextInspect.add(((-i+m)%N, (-j+n)%N))
+                    for m in range(-1,2):
+                        for n in range(-1,2):
+                            inspect.add(((i+m)%N, (j+n)%N))
+                            if newGrid[(i+m)%N, (j+n)%N] == WHITE:
+                                newGrid[(i+m)%N, (j+n)%N] = GRAY
+            # print len(inspect)
 
-        inspect = nextInspect.copy()
-
+        # inspect = inspect.union(inspect)
+    print len(inspect)
     # update data
     img.set_data(newGrid)
     grid[:] = newGrid[:]
@@ -203,6 +225,7 @@ def main():
 
     # declare grid
     grid = np.array([])
+    inspect = set()
     # check for glider flag
     if args.glider:
         grid = np.zeros(N*N).reshape(N, N)
@@ -236,7 +259,7 @@ def main():
     # set up animation
     fig, ax = plt.subplots()
     img = ax.imshow(grid, interpolation='nearest', cmap=cmap, norm=norm)
-    ani = animation.FuncAnimation(fig, update, fargs=(img, grid, N, set()),
+    ani = animation.FuncAnimation(fig, update, fargs=(img, grid, N, inspect,),
                                   frames=10000,
                                   interval=updateInterval,
                                   save_count=50)
