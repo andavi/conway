@@ -4,15 +4,15 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib import colors
 
-GREEN = 255
-BLUE = 170
-RED = 85
 WHITE = 0
+GREEN = 1
+BLUE = 2
+RED = 3
 vals = [WHITE, RED, BLUE, GREEN]
 # vals = [WHITE, GREEN]
-cmap = colors.ListedColormap(['white', 'red', 'blue', 'green'])
+cmap = colors.ListedColormap(['white', 'green', 'blue', 'red'])
 # cmap = colors.ListedColormap(['white', 'green'])
-bounds = [WHITE, RED-1, BLUE-1, GREEN-1, GREEN]
+bounds = [WHITE-.5, GREEN-.5, BLUE-.5, RED-.5, RED+.5]
 # bounds = [WHITE, GREEN/2, GREEN+1]
 norm = colors.BoundaryNorm(bounds, cmap.N)
 
