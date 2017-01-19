@@ -11,7 +11,7 @@ RED = 3
 GRAY = -1
 vals = [GRAY, WHITE, RED, BLUE, GREEN, ]
 # vals = [WHITE, GREEN]
-cmap = colors.ListedColormap(['gray', 'white', 'green', 'blue', 'red'])
+cmap = colors.ListedColormap(['white', 'white', 'green', 'blue', 'red'])
 # cmap = colors.ListedColormap(['white', 'green'])
 bounds = [GRAY-.5, WHITE-.5, GREEN-.5, BLUE-.5, RED-.5, RED+.5]
 # bounds = [WHITE, GREEN/2, GREEN+1]
@@ -174,11 +174,12 @@ def update(frameNum, img, grid, N, inspect):
                     #         inspect.add(((i+m)%N, (j+n)%N))
                     #         if newGrid[(i+m)%N, (j+m)%N] == WHITE:
                     #             newGrid[(i+m)%N, (j+m)%N] = GRAY
-                for m in range(-1,2):
-                    for n in range(-1,2):
-                        inspect.add(((i+m)%N, (j+n)%N))
-                        if newGrid[(i+m)%N, (j+n)%N] == WHITE:
-                            newGrid[(i+m)%N, (j+n)%N] = GRAY
+                if newGrid[i,j] != WHITE:
+                    for m in range(-1,2):
+                        for n in range(-1,2):
+                            inspect.add(((i+m)%N, (j+n)%N))
+                            if newGrid[(i+m)%N, (j+n)%N] == WHITE:
+                                newGrid[(i+m)%N, (j+n)%N] = GRAY
             else:
                 if total == 3:
                     newGrid[i, j] = GREEN
@@ -190,7 +191,7 @@ def update(frameNum, img, grid, N, inspect):
             # print len(inspect)
 
         # inspect = inspect.union(inspect)
-    print len(inspect)
+    # print len(inspect)
     # update data
     img.set_data(newGrid)
     grid[:] = newGrid[:]
