@@ -104,12 +104,43 @@ def addGosperGliderGun(i, j, grid):
 def alive(i, j, grid):
     return int(grid[i, j] > 0)
 
-def update(frameNum, img, grid, N):
+def update(frameNum, img, grid, N, inspect):
     # copy grid since we require 8 neighbors for calculation
     # and we go line by line
     newGrid = grid.copy()
-    for i in range(N):
-        for j in range(N):
+    if not inspect:
+        for i in range(N):
+            for j in range(N):
+                # compute 8 neighbors
+                total = int(alive(i, (j-1)%N, grid) + alive(i, (j+1)%N, grid) +
+                        alive((i-1)%N, j, grid) + alive((i+1)%N, j, grid) +
+                        alive((i-1)%N, (j-1)%N, grid) + alive((i-1)%N, (j+1)%N, grid) +
+                        alive((i+1)%N, (j-1)%N, grid) + alive((i+1)%N, (j+1)%N, grid))
+                # apply rules
+                if alive(i, j, grid):
+                    if (total < 2) or (total > 3):
+                        newGrid[i, j] = WHITE
+                    elif (total == 2):
+                        newGrid[i, j] = BLUE
+                        # inspect.add((i, j))
+                        for m in range(3):
+                            for n in range(3):
+                                inspect.add(((-i+m)%N, (-j+n)%N))
+                    else:
+                        newGrid[i, j] = RED
+                        for m in range(3):
+                            for n in range(3):
+                                inspect.add(((-i+m)%N, (-j+n)%N))
+                else:
+                    if total == 3:
+                        newGrid[i, j] = GREEN
+                        for m in range(3):
+                            for n in range(3):
+                                inspect.add(((-i+m)%N, (-j+n)%N))
+
+    else:
+        nextInspect = set()
+        for i, j in inspect:
             # compute 8 neighbors
             total = int(alive(i, (j-1)%N, grid) + alive(i, (j+1)%N, grid) +
                     alive((i-1)%N, j, grid) + alive((i+1)%N, j, grid) +
@@ -121,11 +152,22 @@ def update(frameNum, img, grid, N):
                     newGrid[i, j] = WHITE
                 elif (total == 2):
                     newGrid[i, j] = BLUE
+                    for m in range(3):
+                        for n in range(3):
+                            nextInspect.add(((-i+m)%N, (-j+n)%N))
                 else:
                     newGrid[i, j] = RED
+                    for m in range(3):
+                        for n in range(3):
+                            nextInspect.add(((-i+m)%N, (-j+n)%N))
             else:
                 if total == 3:
                     newGrid[i, j] = GREEN
+                    for m in range(3):
+                        for n in range(3):
+                            nextInspect.add(((-i+m)%N, (-j+n)%N))
+
+        inspect = nextInspect.copy()
 
     # update data
     img.set_data(newGrid)
@@ -194,7 +236,7 @@ def main():
     # set up animation
     fig, ax = plt.subplots()
     img = ax.imshow(grid, interpolation='nearest', cmap=cmap, norm=norm)
-    ani = animation.FuncAnimation(fig, update, fargs=(img, grid, N, ),
+    ani = animation.FuncAnimation(fig, update, fargs=(img, grid, N, set()),
                                   frames=10000,
                                   interval=updateInterval,
                                   save_count=50)
